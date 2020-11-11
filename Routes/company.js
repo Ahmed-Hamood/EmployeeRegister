@@ -1,6 +1,7 @@
 const express = require("express")
 const { check, validationResult } = require("express-validator")
 const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 const Company = require(".././Models/Company")
 const Router = express.Router()
 
@@ -15,9 +16,11 @@ let ValidateRequestBody = [
 ]
 
 // # Register New User
+
 Router.post("/", ValidateRequestBody, async (req, res) => {
   // - Pass request body into validation checks to start validate
   const Errors = validationResult(req)
+  let response = {}
   // - if any validation Error then response with errors
   if (!Errors.isEmpty()) {
     return res.status(400).json({ Errors: Errors.errors.map(err => err.msg) })
@@ -34,17 +37,35 @@ Router.post("/", ValidateRequestBody, async (req, res) => {
     CompanyPassword,
   })
 
-  // - Hash the plain Text Password
-  company.CompanyPassword = await bcrypt.hash(CompanyPassword, 10)
+  try {
+    // - Hash the plain Text Password
+    company.CompanyPassword = await bcrypt.hash(CompanyPassword, 10)
 
-  // - Save Data into the Database
-  let data = await company.save()
+    // - Save Data into the Database
+    await company.save();
 
-  // - response with save confirmation
-  res.status(200).json({
-    message: "Company Saved Successfully",
-    data,
-  })
+    // - Generate Json Web Token and send it in json response
+    const Token = jwt.sign(
+      { id: company.id },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      },
+      (err, token) => {
+        // - response with save confirmation And Token
+        res.status(200).json({
+          message: "Company Saved Successfully",
+          Company_Id: company.CompanyId,
+          Company_Name: company.CompanyName,
+          Company_Email: company.CompanyEmail,
+          token,
+        })
+      }
+    )
+  } catch (error) {
+    // - response with Error
+    res.status(400).json({ message: "Database Error ...." })
+  }
 })
 
 module.exports = Router

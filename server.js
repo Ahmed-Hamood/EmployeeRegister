@@ -1,11 +1,18 @@
 const express = require("express")
 const app = express()
-const Port = process.env.PORT || 3000
+const dotenv = require("dotenv")
 const DB_Connect = require('./DB')
+
+const Port = process.env.PORT || 3000
+// - Set Env from config.env
+dotenv.config({ path: "./config.env" })
+
  
 const auth = require("./Routes/auth")
 const company = require("./Routes/company")
 const employee = require("./Routes/employee");
+
+
 
 // - Connecting to the Database
 DB_Connect();
