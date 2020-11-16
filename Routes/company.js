@@ -1,12 +1,10 @@
 const express = require("express")
-const { check, validationResult } = require("express-validator")
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
-const Company = require(".././Models/Company")
-const AuthController = require(".././Controllers/AuthController")
 const Router = express.Router()
+const { check } = require("express-validator")
+const AuthController = require("../Controllers/Company/AuthController")
+const CompanyController = require("../Controllers/Company/CompanyController")
 
-let ValidateRequestBody = [
+const ValidateRegister = [
   check("CompanyId")
     .exists()
     .withMessage("Invalid Request")
@@ -70,55 +68,33 @@ let ValidateRequestBody = [
     .withMessage("Passwords do not match"),
 ]
 
-// # Register New User
+const ValidateLogin = [
+  check("CompanyEmail")
+    .trim()
+    .notEmpty()
+    .withMessage("Please Provide Company Email")
+    .bail()
+    .isEmail()
+    .withMessage("Invalid Email Address")
+    .normalizeEmail(),
+  // #####################################################
+  check("CompanyPassword")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("Please Provide Company Password")
+    .bail()
+    .isLength({ min: 6, max: 20 })
+    .withMessage("Please Enter a Password with 6 or more characters"),
+]
 
-Router.post("/", ValidateRequestBody, async (req, res) => {
-  // - Pass request body into validation checks to start validate
-  const Errors = validationResult(req)
-  let response = {}
-  let statusCode = null
-  // - if any validation Error then response with errors
-  if (!Errors.isEmpty()) {
-    return res.status(400).json({ Errors: Errors.errors.map(err => err.msg) })
-  }
+// # Register New Company And Get Token
+Router.post("/auth/signup", ValidateRegister, AuthController.RegisterCompany)
 
-  // - extract JSON data from request body
-  const { CompanyId, CompanyName, CompanyEmail, CompanyPassword } = req.body
+// # Login Company -  Authenticate Company And Get Token - Access Public
+Router.post("/auth/login", ValidateLogin, AuthController.LoginCompany)
 
-  // - Create new instance from a Company model
-  const company = new Company({
-    CompanyId,
-    CompanyName,
-    CompanyEmail,
-    CompanyPassword,
-  })
-
-  try {
-    // - Hash the plain Text Password
-    company.CompanyPassword = await bcrypt.hash(CompanyPassword, 10)
-
-    // - Save Data into the Database
-    await company.save()
-
-    // - Generate Json Web Token and send it in json response
-    const Token = await AuthController.GenerateToken(company.id)
-    // - set status code & response with Success
-    statusCode = 200
-    response = {
-      message: "Company Registered Successfully",
-      Company_Id: company.CompanyId,
-      Company_Name: company.CompanyName,
-      Company_Email: company.CompanyEmail,
-      Token,
-    }
-  } catch (error) {
-    // - response with Error
-    statusCode = 400
-    response = {
-      message: "Database Error ....",
-    }
-  }
-  res.status(statusCode).json(response)
-})
+// # Get Company ( Protect Route ) - Authorize Token - Decode into req.company - Then Get Company by req.company.id
+Router.get("/", AuthController.ProtectAccess, CompanyController.GetCompany)
 
 module.exports = Router
