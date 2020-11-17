@@ -140,7 +140,6 @@ exports.ProtectAccess = async (req, res, next) => {
   try {
     // - verify token
     const decode = await VerifyToken(Token)
-    console.log(decode)
     // store company info inside req.company
     req.company = decode.company
     // - Access Allowed to the next route

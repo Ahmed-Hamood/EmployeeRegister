@@ -14,7 +14,7 @@ const ValidateRegister = [
     .withMessage("Please Provide Company ID")
     .bail()
     .isNumeric()
-    .withMessage("Company ID only Numbers"),
+    .withMessage("Company ID only should contain Numbers"),
   // #######################################################################
   check("CompanyName")
     .exists()
@@ -41,7 +41,7 @@ const ValidateRegister = [
   check("CompanyPassword")
     .exists()
     .withMessage("Invalid Request")
-    .trim()
+    .trim() 
     .escape()
     .notEmpty()
     .withMessage("Please Provide Company Password")

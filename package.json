@@ -4,13 +4,16 @@
   "description": "Employee Detail Register System",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "server": "node server.js",
+    "client": "npm start --prefix client",
+    "start": "concurrently \"nodemon run server\" \" npm run client\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "concurrently": "^5.3.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.6.1",

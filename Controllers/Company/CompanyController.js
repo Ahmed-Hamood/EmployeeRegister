@@ -1,7 +1,6 @@
 const Company = require("../../Models/Company")
 
 exports.GetCompany = async (req, res) => {
-  console.log("sssssssssssssssssssssssssss")
   try {
     const company = await Company.findById(req.company.id).select(
       "-CompanyPassword -__v"
@@ -12,4 +11,9 @@ exports.GetCompany = async (req, res) => {
       msg: "Server Error ....",
     })
   }
+}
+
+
+exports.UpdateCompany = async (req, res) => {
+  
 }

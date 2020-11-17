@@ -19,10 +19,11 @@ const CompanySchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  CompanyDataOfJoin: {
+  Added_Date: {
     type: Date,
     default: Date.now(),
   },
+
 })
 
 module.exports = mongoose.model("Company", CompanySchema)
