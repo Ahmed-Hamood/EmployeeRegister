@@ -1,0 +1,139 @@
+nav {
+  background: rgb(26, 25, 25);
+  position: relative;
+  display: inline-block;
+  top: 0;
+  bottom: 0;
+  width: 280px;
+  height: 110.861vh;
+  /* overflow: hidden; */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: 0.4s all;
+}
+
+nav:hover {
+  /* width: 280px; */
+}
+
+.nav-menu-container {
+  /* overflow: hidden; */
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.menu {
+  padding: 10px 18px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 280px;
+  border-bottom: 1px solid #5e5e5e;
+  transition: ease-out 0.3s all;
+}
+
+.menu:hover {
+  background: #222f3e;
+}
+
+.user-content {
+  background: rgb(26, 25, 25);
+  border-bottom: none;
+  border-top: 1px solid #747d8c;
+  padding: 10px 12px;
+  animation: usercontent 0.6s linear;
+}
+
+@keyframes usercontent {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.user-content:hover {
+  background: rgb(26, 25, 25);
+}
+
+.user-content h1 {
+  font-weight: 500;
+  color: #f5f6fa;
+  transition: 0.3s all;
+}
+.user-content h1:hover {
+  color: #7f8fa6;
+}
+
+.menu-image {
+  width: 25px;
+  height: 25px;
+}
+.menu-title {
+  font-family: "Calibri";
+  color: #f5f6fa;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-left: 20px;
+}
+
+.logout-container {
+  width: 280px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.logout {
+  background: rgb(180, 18, 18);
+  color: white;
+  padding: 3px 12px;
+  border-radius: 10px;
+  transition: 0.3s all;
+  width: 60%;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-top: 14px;
+ margin-left: 12px;
+}
+.logout:hover {
+  background: rgb(114, 11, 11);
+}
+.company-title {
+  color: white;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  padding-top: 5px;
+  margin-left: 8px;
+}
+.logo {
+  background: #f0f0ee;
+  border: 1px solid #d3cece59;
+}
+.logo h1 {
+  color: #2d3436;
+}
+.logo:hover {
+  background: #f0f0ee;
+}
+
+.user-icon {
+  background: #f0f0ee;
+  border-radius: 200px;
+  width: 40px;
+  height: 40px;
+}
+
+@media (max-width: 1630px) {
+  nav {
+    width: 100px;
+    height: 110.861vh;
+    overflow: hidden;
+  }
+
+  nav:hover {
+    width: 280px;
+  }
+}

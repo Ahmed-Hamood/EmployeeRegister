@@ -4,7 +4,7 @@ const CompanySchema = new mongoose.Schema({
   CompanyId: {
     type: String,
     require: true,
-    // unique: true,
+   unique: true,
   },
   CompanyName: {
     type: String,
@@ -13,7 +13,7 @@ const CompanySchema = new mongoose.Schema({
   CompanyEmail: {
     type: String,
     require: true,
-    // unique: true,
+     unique: true,
   },
   CompanyPassword: {
     type: String,

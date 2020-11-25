@@ -13,7 +13,7 @@ const ValidateRegister = [
     .notEmpty()
     .withMessage("Please Provide Company ID")
     .bail()
-    .isNumeric()
+    .isString()
     .withMessage("Company ID only should contain Numbers"),
   // #######################################################################
   check("CompanyName")

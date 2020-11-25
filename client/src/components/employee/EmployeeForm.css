@@ -1,0 +1,84 @@
+.form-container {
+  display: grid;
+  grid-template-columns: 400px 400px;
+  grid-template-rows: 300px 50px;
+  font-family: "Calibri Light";
+}
+label {
+  color: #2f3640;
+  font-weight: 600;
+  font-size: 1.3rem;
+  display: block;
+  margin-bottom: 1px;
+}
+
+input {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1px solid rgb(182, 182, 182);
+  border-radius: 2px;
+  outline: none;
+  padding: 8px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+select {
+  padding: 3px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1px solid rgb(182, 182, 182);
+  border-radius: 2px;
+  outline: none;
+  margin-bottom: 8px;
+}
+option{
+  font-weight: 600;
+}
+
+.form-section-right {
+  margin-left: 50px;
+  height: 200px;
+}
+.form-section-left {
+  height: 200px;
+}
+
+.form-btn {
+  grid-area: 2 / 1 / 2 / 3;
+}
+
+.f-btn {
+  padding: 12px;
+  margin-top: 30px;
+  width: 150px;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.0rem;
+  font-weight: 600;
+  color: white;
+}
+
+.form-btn input{
+  display: inline-block;
+}
+.btn-save {
+  background: #40739e;
+  transition: 0.3s all;
+}
+.btn-save:hover {
+  background: #2b4c68;
+}
+
+.btn-clear {
+  text-align: center;
+  margin-left: 6px;
+  background:#c23616;
+  transition: 0.3s all;
+}
+.btn-clear:hover {
+  margin-left: 6px;
+  background:#83220c;
+}

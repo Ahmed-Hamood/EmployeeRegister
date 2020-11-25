@@ -1,0 +1,31 @@
+.alert-container {
+  width: 100%;
+  margin-top: 20px;
+  padding: 8px;
+  color: #f5f6fa;
+  border-radius: 5px;
+  font-family: "Trebuchet MS", sans-serif, 'Calibri';
+  font-size: 1.1rem;
+  font-weight: 600;
+  grid-area: 1 / 1 / 2 / 3;
+}
+
+.header-title{
+  color: #0097e6;
+  font-size: 1.7rem;
+  font-weight:600;
+}
+
+
+.alert-container ul {
+  list-style-type: square;
+  padding: 3px 22px;
+}
+
+.green {
+  background: #249b00;
+}
+
+.danger{
+  background: #c23616;
+}

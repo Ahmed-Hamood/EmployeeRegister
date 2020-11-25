@@ -35,8 +35,12 @@ const EmployeeSchema = new mongoose.Schema({
     enum: ["A", "B", "C", "D"],
   },
   DateOfJoin: {
-    type: Date,
+    type: String,
     requires: true,
+  },
+  EmployeeSalary: {
+    type: Number,
+    required: true,
   },
   Created_Date: {
     type: Date,

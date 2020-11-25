@@ -1,9 +1,17 @@
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom"
+import App from "./App"
 
-function App() {
-  return (
-   <h1> Welcome To React </h1>
-  );
-}
+import EmployeeState from "./context/Employee/EmployeeState"
+import AuthState from "./context/Auth_Company/AuthState"
+import AlertState from "./context/Alert/AlertState"
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <AuthState>
+    <AlertState>
+      <EmployeeState>
+        <App />
+      </EmployeeState>
+    </AlertState>
+  </AuthState>,
+  document.getElementById("root")
+)

@@ -23,11 +23,13 @@ const VerifyToken = async token => {
 // - Create/Register New Company
 exports.RegisterCompany = async (req, res) => {
   // - Pass request body into validation checks to start validate
+  console.log(req.body)
   const Errors = validationResult(req)
   let response = {}
   let statusCode = null
   // - if any validation Error then response with errors
   if (!Errors.isEmpty()) {
+    console.log(Errors)
     return res.status(400).json({ Errors: Errors.errors.map(err => err.msg) })
   }
 
@@ -43,6 +45,17 @@ exports.RegisterCompany = async (req, res) => {
   })
 
   try {
+    const find_company = await Company.findOne({ CompanyEmail })
+
+    if (find_company) {
+      console.log("Find some thing")
+      return res.status(400).json({
+        Errors: [
+          "Company already have an Account",
+          "Use Another Email Account",
+        ],
+      })
+    }
     // - Hash the plain Text Password
     company.CompanyPassword = await bcrypt.hash(CompanyPassword, 10)
 
@@ -50,21 +63,24 @@ exports.RegisterCompany = async (req, res) => {
     await company.save()
 
     // - Generate Json Web Token and send it in json response
-    const Token = await GenerateToken(company.id)
+    const token = await GenerateToken(company.id)
     // - set status code & response with Success
     statusCode = 200
     response = {
       message: "Company Registered Successfully",
-      Company_Id: company.CompanyId,
-      Company_Name: company.CompanyName,
-      Company_Email: company.CompanyEmail,
-      Token,
+      id: company.id,
+      CompanyId: company.CompanyId,
+      CompanyName: company.CompanyName,
+      CompanyEmail: company.CompanyEmail,
+      AddedDate: company.Added_Date,
+      token
     }
   } catch (error) {
     // - response with Error
     statusCode = 400
+    console.log(error)
     response = {
-      message: "Database Error ....",
+      Errors: ["Database Errorrrr ...."]
     }
   }
   res.status(statusCode).json(response)
@@ -79,9 +95,10 @@ exports.LoginCompany = async (req, res) => {
 
   // - if any validation Error then response with errors
   if (!Errors.isEmpty()) {
-    return res
-      .status(400)
-      .json({ Errors: Errors.errors.map(err => err.param + ": " + err.msg) })
+    return res.status(400).json({
+      Errors: Errors.errors.map(err => err.param + ": " + err.msg),
+      message: "Login Failed",
+    })
   }
 
   const { CompanyEmail, CompanyPassword } = req.body
@@ -91,7 +108,10 @@ exports.LoginCompany = async (req, res) => {
     // - if Email does not exist then response
     if (!company) {
       return res.status(400).json({
-        msg: "Invalid Credential - Please check either your Email or Password",
+        Errors: [
+          "Invalid Credential",
+          "Please check either your Email or Password",
+        ],
       })
     }
 
@@ -101,7 +121,7 @@ exports.LoginCompany = async (req, res) => {
     // - if password does not match the password from database then response with an error
     if (!pass) {
       return res.status(400).json({
-        msg: "Invalid Credential - Please check either your Email or Password",
+        Errors: ["Invalid Credential", "Please check either your Email or Password"],
       })
     }
 
@@ -111,15 +131,17 @@ exports.LoginCompany = async (req, res) => {
     statusCode = 200
     response = {
       message: `Welcome ${company.CompanyName}`,
-      Company_Id: company.CompanyId,
+      id: company.id,
+      Company_Id: company.id,
       Company_Name: company.CompanyName,
       Company_Email: company.CompanyEmail,
       token,
     }
+    console.log(response)
   } catch (error) {
     statusCode = 400
     response = {
-      message: "Database Error ....",
+      Errors: ["Database Error ...."],
     }
   }
 
@@ -133,7 +155,7 @@ exports.ProtectAccess = async (req, res, next) => {
   // - if there no token in header then response
   if (!Token) {
     return res.status(401).json({
-      msg: "Token Not Available - Authorization Denied",
+      Errors: ["Token Not Available - Authorization Denied"],
     })
   }
 
@@ -146,7 +168,7 @@ exports.ProtectAccess = async (req, res, next) => {
     next()
   } catch (error) {
     return res.status(401).json({
-      msg: "Invalid Token...",
+      Errors: ["Invalid Token..."],
     })
   }
 }

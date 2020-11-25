@@ -24,7 +24,7 @@ const ValidateEmployee = [
     .notEmpty()
     .withMessage("Please Provide Name")
     .bail()
-    .isAlpha()
+    .matches(/^[a-z A-Z]+$/i)
     .withMessage("Invalid Employee Name"),
   // #######################################################################
   check("Gender")
@@ -58,7 +58,7 @@ const ValidateEmployee = [
     .notEmpty()
     .withMessage("Please Provide Nationality")
     .bail()
-    .isAlpha()
+    .matches(/^[a-z A-Z]+$/i)
     .withMessage("Invalid Nationality"),
   // #######################################################################
   check("MobilePhone")
@@ -91,8 +91,18 @@ const ValidateEmployee = [
     .notEmpty()
     .withMessage("Please Provide Date Of Join")
     .bail()
-    .isDate()
+    .matches(/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/)
     .withMessage("Invalid Date"),
+  check("EmployeeSalary")
+    .exists()
+    .withMessage("Invalid Request")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("Please Provide Employee Salary")
+    .bail()
+    .isFloat()
+    .withMessage("Invalid Salary"),
 ]
 
 const ValidateEmployeeOptional = [
@@ -113,7 +123,7 @@ const ValidateEmployeeOptional = [
     .notEmpty()
     .withMessage("Please Provide Name")
     .bail()
-    .isAlpha()
+    .isString()
     .withMessage("Invalid Employee Name"),
   // #######################################################################
   check("Gender")
@@ -174,8 +184,17 @@ const ValidateEmployeeOptional = [
     .notEmpty()
     .withMessage("Please Provide Date Of Join")
     .bail()
-    .isDate()
+    .isString()
     .withMessage("Invalid Date"),
+  check("EmployeeSalary")
+    .optional()
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("Please Provide Employee Salary")
+    .bail()
+    .isFloat()
+    .withMessage("Invalid Salary"),
 ]
 
 // Get All Employees - Private

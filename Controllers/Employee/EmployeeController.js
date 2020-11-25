@@ -6,6 +6,7 @@ exports.GetAllEmployees = async (req, res) => {
     const employees = await employee
       .find({ company: req.company.id })
       .sort({ DateOfJoin: -1 })
+      .select("-__v")
     return res.json(employees)
   } catch (err) {
     console.error(err.message)
@@ -16,6 +17,7 @@ exports.GetAllEmployees = async (req, res) => {
 }
 
 exports.CreateEmployee = async (req, res) => {
+  console.log(req.body)
   const Errors = validationResult(req)
   // - if any validation Error then response with errors
   if (!Errors.isEmpty()) {
@@ -31,6 +33,7 @@ exports.CreateEmployee = async (req, res) => {
     MobilePhone,
     EmployeeCategory,
     DateOfJoin,
+    EmployeeSalary,
   } = req.body
 
   try {
@@ -43,6 +46,7 @@ exports.CreateEmployee = async (req, res) => {
       MobilePhone,
       EmployeeCategory,
       DateOfJoin,
+      EmployeeSalary,
       company: req.company.id,
     })
 
@@ -50,7 +54,7 @@ exports.CreateEmployee = async (req, res) => {
   } catch (error) {
     console.error(error.message)
     return res.status(401).json({
-      msg: "Server Error ....",
+      Errors: ["Server Error ...."],
     })
   }
 }
@@ -64,9 +68,10 @@ exports.UpdateEmployee = async (req, res) => {
     Nationality,
     MobilePhone,
     EmployeeCategory,
+    EmployeeSalary,
     DateOfJoin,
   } = req.body
-
+  console.log(req.body)
   const UpdatedFields = {}
 
   if (Staffid) {
@@ -90,12 +95,15 @@ exports.UpdateEmployee = async (req, res) => {
   if (EmployeeCategory) {
     UpdatedFields.EmployeeCategory = EmployeeCategory
   }
+  if (EmployeeSalary) {
+    UpdatedFields.EmployeeSalary = EmployeeSalary
+  }
   if (DateOfJoin) {
     UpdatedFields.DateOfJoin = DateOfJoin
   }
 
   if (Object.keys(UpdatedFields).length === 0) {
-    return res.status(404).json({ msg: "Nothing to update" })
+    return res.status(404).json({ Errors: ["Nothing to update"] })
   }
 
   const Errors = validationResult(req)
@@ -108,12 +116,12 @@ exports.UpdateEmployee = async (req, res) => {
     let getEmployee = await employee.findById(req.params.id)
 
     if (!getEmployee) {
-      return res.status(404).json({ msg: "Employee Not Found ...." })
+      return res.status(404).json({ Errors: ["Employee Not Found ...."] })
     }
 
     // - Check Company is Authorize to update current employee
     if (getEmployee.company.toString() !== req.company.id) {
-      return res.status(401).json({ msg: "Not Authorized ...." })
+      return res.status(401).json({ Errors: ["Not Authorized ...."] })
     }
 
     getEmployee = await employee.findByIdAndUpdate(
@@ -126,7 +134,7 @@ exports.UpdateEmployee = async (req, res) => {
   } catch (error) {
     console.error(error.message)
     return res.status(401).json({
-      msg: "Server Error ....",
+      Errors: ["Server Error ...."],
     })
   }
 }
@@ -136,12 +144,12 @@ exports.DeleteEmployee = async (req, res) => {
     const getEmployee = await employee.findById(req.params.id)
 
     if (!getEmployee) {
-      return res.status(404).json({ msg: "Employee Not Found ...." })
+      return res.status(404).json({ Errors: ["Employee Not Found ...."] })
     }
 
     // - Check Company is Authorize to update current employee
     if (getEmployee.company.toString() !== req.company.id) {
-      return res.status(401).json({ msg: "Not Authorized ...." })
+      return res.status(401).json({ Errors: ["Not Authorized ...."] })
     }
 
     await employee.findByIdAndRemove(req.params.id)
